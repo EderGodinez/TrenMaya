@@ -1,19 +1,11 @@
-<div class="flex h-25 w-screen bg-green-900 p-5">
+<div class="flex h-25 w-screen bg-green-900 p-5 justify-content-between align-items-center">
   <img src="assets/TMaya-removebg-preview.png" alt="" width="5%">
-  <h1>Layoutpage</h1>
-  <p-tabMenu [model]="items" [activeItem]="activeItem">
-    <ng-template pTemplate="item" let-item>
-        <a class="p-menuitem-link flex justify-content-between align-items-center p-3">
-            <div>
-                <span [class]="item.icon"></span>
-                <span> {{ item.label }}</span>
-            </div>
-            <div>
-                <span *ngIf="item.shortcut" [class]="item.shortcutClass">{{ item.shortcut }}</span>
-                <p-badge *ngIf="item.badge" [value]="item.badge" [severity]="item.badgeSeverity"></p-badge>
-            </div>
-        </a>
-    </ng-template>
-</p-tabMenu>
+  <h1 class="text-white">Tren Maya</h1>
+  <p-tabMenu [model]="items" [activeItem]="activeItem" (activeItemChange)="onActiveItemChange($event)"></p-tabMenu>
 </div>
 <router-outlet/>
+<div class="w-screen bg-green-900 text-white text-center p-3">
+  <span class="text-lg">
+    &#169;Proyecto desarrollado por alumno Eder Yair Godinez Salazar con fines educativos en centro universitario de la cienega
+  </span>
+</div>
