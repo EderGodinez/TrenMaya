@@ -10,6 +10,7 @@ import { ReservationsLayoutComponent } from './pages/reservations-layout/reserva
 import { ViewReservationsComponent } from './pages/view-reservations/view-reservations.component';
 import { NewReservationPageComponent } from './pages/new-reservation-page/new-reservation-page.component';
 import { HomePageComponent } from './pages/home-page/home-page.component';
+import { PrimeModule } from './prime/prime.module';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { HomePageComponent } from './pages/home-page/home-page.component';
     HomePageComponent
   ],
   imports: [
+    PrimeModule,
     BrowserModule,
     AppRoutingModule
   ],
