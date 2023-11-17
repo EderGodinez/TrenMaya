@@ -1,0 +1,10 @@
+:host {
+  display: block;
+}
+::ng-deep{
+  .boton{
+    position: absolute;
+    top: 30%;
+    right: 3%;
+  }
+}

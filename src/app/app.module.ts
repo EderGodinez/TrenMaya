@@ -11,6 +11,7 @@ import { ViewReservationsComponent } from './pages/view-reservations/view-reserv
 import { NewReservationPageComponent } from './pages/new-reservation-page/new-reservation-page.component';
 import { HomePageComponent } from './pages/home-page/home-page.component';
 import { PrimeModule } from './prime/prime.module';
+import { MapPageComponent } from './pages/MapPage/MapPage.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { PrimeModule } from './prime/prime.module';
     ReservationsLayoutComponent,
     ViewReservationsComponent,
     NewReservationPageComponent,
-    HomePageComponent
+    HomePageComponent,
+    MapPageComponent
   ],
   imports: [
     PrimeModule,

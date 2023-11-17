@@ -7,10 +7,12 @@ import { ReservationsLayoutComponent } from './pages/reservations-layout/reserva
 import { ViewReservationsComponent } from './pages/view-reservations/view-reservations.component';
 import { NewReservationPageComponent } from './pages/new-reservation-page/new-reservation-page.component';
 import { HomePageComponent } from './pages/home-page/home-page.component';
+import { MapPageComponent } from './pages/MapPage/MapPage.component';
 
 const routes: Routes = [
 {path:'TrenMaya',component:LayoutPageComponent,children:[
   {path:'Home',component:HomePageComponent},
+  {path:'Map',component:MapPageComponent},
   {path:'Login',component:LoginPageComponent},
   {path:'Register',component:RegisterPageComponent},
   {path:'Reservations',component:ReservationsLayoutComponent,children:[
