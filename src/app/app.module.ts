@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -13,6 +14,10 @@ import { HomePageComponent } from './pages/home-page/home-page.component';
 import { PrimeModule } from './prime/prime.module';
 import { MapPageComponent } from './pages/MapPage/MapPage.component';
 
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ValidatorService } from './validators/validator.service';
+import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
 @NgModule({
   declarations: [
     AppComponent,
@@ -26,11 +31,16 @@ import { MapPageComponent } from './pages/MapPage/MapPage.component';
     MapPageComponent
   ],
   imports: [
-    PrimeModule,
+    CommonModule,
+    ReactiveFormsModule,
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    HttpClientModule,
+    BrowserAnimationsModule,
+    PrimeModule,
+    FormsModule,
   ],
-  providers: [],
+  providers: [ValidatorService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

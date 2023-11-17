@@ -1,1 +1,94 @@
-<p>register-page works!</p>
+
+
+<p-toast></p-toast>
+<div class="surface-ground flex align-items-start justify-content-center min-h-screen min-w-screen overflow-hidden">
+  <div class="flex flex-column align-items-center justify-content-center p-5">
+      <div style="border-radius:56px; padding:0.3rem; background: linear-gradient(180deg, #547a44 10%, rgb(2 2 2 / 0%) 30%);">
+          <div class="surface-card py-5 px-3 sm:px-8" style="border-radius:53px;width: 90rem;">
+              <div class="text-center mb-5">
+                  <div class="text-900 text-3xl font-medium mb-3">Bienvenido</div>
+                  <span class="text-600 font-medium">Crear una cuenta</span>
+              </div>
+              <div class="flex flex-column">
+                <form (ngSubmit)="VerifyAccount()" [formGroup]="RegisterForm">
+
+                  <label for="email1" class="block text-900 text-xl font-medium mb-3">Correo</label>
+                  <input id="email1" type="text" placeholder="Correo electronico" pInputText class="w-full" style="padding:1rem;" formControlName="email">
+                  <small>Ingresa correo electronico</small>
+                  <small id="NewPassword-help" class="text-danger" *ngIf="RegisterForm.controls['email'].getError('required')&&RegisterForm.controls['email'].touched"><br>Este campo es obligatorio</small>
+                  <small id="NewPassword-help" class="text-danger" *ngIf="RegisterForm.controls['email'].getError('pattern')&&RegisterForm.controls['email'].touched"><br>No cuenta con un formato de correo valido</small>
+                  <div class="flex gap-4 justify-content-start w-full">
+                    <div class="w-6">
+                      <label for="name" class="block text-900 text-xl font-medium my-3">Nombres</label>
+                      <input id="nane" type="text" placeholder="Nombres" pInputText class="w-full" style="padding:1rem" formControlName="username">
+                      <small class="font-medium">Ingresar nombre de usuario </small>
+                      <small *ngIf="RegisterForm.controls['username'].getError('required')&&RegisterForm.controls['username'].touched" class="text-danger font-medium"><br>Este campo es obligatorio</small>
+                      <small id="NewPassword-help" class="text-danger" *ngIf="RegisterForm.controls['username'].getError('pattern')&&RegisterForm.controls['username'].touched"><br>No cuenta con un formato de uno o dos nombres o los nombres son invalidos</small>
+                    </div>
+                    <div class="w-6">
+                      <label for="lastname" class="block text-900 text-xl font-medium my-3">Apellidos</label>
+                      <input id="lastname" type="text" placeholder="Apellidos" pInputText class="w-full" style="padding:1rem"formControlName="lastname">
+                      <small class="font-medium">Ingresar apellidos de usuario </small>
+                      <small *ngIf="RegisterForm.controls['lastname'].getError('required')&&RegisterForm.controls['lastname'].touched" class="text-danger font-medium"><br>Este campo es obligatorio</small>
+                      <small id="NewPassword-help" class="text-danger" *ngIf="RegisterForm.controls['lastname'].getError('pattern')&&RegisterForm.controls['lastname'].touched"><br>No cuenta con un formato de uno o dos apellidos o los apellidos son invalidos</small>
+                    </div>
+                  </div>
+                  <div class="p-grid">
+                    <div class="p-col-4">
+                      <label for="gender" class="block text-900 text-xl font-medium my-3">Estado</label>
+                      <p-dropdown [options]="States" optionLabel="nombre" optionValue="id" formControlName="state" NgClass="w-full mb-3" placeholder="Estado de nacimiento"></p-dropdown>
+                      <small class="font-medium">Este campo es opcional en caso de ser Mexicano. <br> </small>
+                      <small class="font-medium">Ingresar estado de proveniencia en caso de ser Mexicano</small>
+                      <small *ngIf="RegisterForm.controls['state'].value===''&&RegisterForm.controls['state'].touched" class="text-danger font-medium"><br>Este campo es obligatorio</small>
+                    </div>
+                  </div>
+                  <div class="flex gap-4 justify-content-start w-full">
+                    <div class="w-6">
+                      <label for="curp" class="block text-900 text-xl font-medium my-3">CURP</label>
+                      <input id="curp" type="text" placeholder="Nombres" pInputText class="w-full" style="padding:1rem" formControlName="CURP">
+                      <small class="font-medium">CURP de usuario mexicano </small>
+                      <small *ngIf="RegisterForm.controls['username'].getError('required')&&RegisterForm.controls['username'].touched" class="text-danger font-medium"><br>Este campo es obligatorio</small>
+                      <small id="NewPassword-help" class="text-danger" *ngIf="RegisterForm.controls['username'].getError('pattern')&&RegisterForm.controls['username'].touched"><br>No cuenta con un formato de uno o dos nombres o los nombres son invalidos</small>
+                    </div>
+                    <div class="w-6">
+                      <label for="doc" class="block text-900 text-xl font-medium my-3">Documento oficial</label>
+                      <p-fileUpload mode="basic" chooseLabel="Choose" name="demo[]" url="https://www.primefaces.org/cdn/api/upload.php" accept="image/*" [maxFileSize]="1000000" (onUpload)="onUpload($event)"></p-fileUpload>
+                      <small class="font-medium">Ingresar documento oficial en formato de imagen </small>
+
+                    </div>
+                  </div>
+
+
+                  <div class="w-full flex gap-2 justify-content-center">
+                    <div class="w-4">
+                      <label for="birthdate" class="block text-900 text-xl font-medium my-3">Fecha de nacimiento</label>
+                      <p-calendar formControlName="birtdate" [showIcon]="true"></p-calendar><br>
+                      <small id="calendar-help">Ingrese la fecha de nacimiento de debera ser mayor de edad <br></small>
+                      <small *ngIf="!esMayorDeEdad(RegisterForm.controls['birtdate'].value)" class="text-danger" id="calendar-help">Usuario no es mayor de edad</small>
+                    </div>
+                    <div class="w-4">
+                      <label for="gender" class="block text-900 text-xl font-medium my-3">Contraseña</label>
+                      <p-password formControlName="password" [toggleMask]="true"  [ngClass]="{'ng-invalid ng-dirty':!RegisterForm.controls['password'].valid&&RegisterForm.controls['password'].touched}">
+
+                    </p-password>
+                    <small id="NewPassword-help">Ingrese la contraseña en considerando las sugerencias</small>
+                    <small id="NewPassword-help" class="text-danger" *ngIf="RegisterForm.controls['password'].getError('required')&&RegisterForm.controls['password'].touched"><br>Este campo es obligatorio</small>
+                    <small id="NewPassword-help" class="text-danger" *ngIf="RegisterForm.controls['password'].getError('minlength')&&RegisterForm.controls['password'].touched"><br>Este campo debe de contender un minimo de {{RegisterForm.controls['password'].value!.length}}-10 caracteres</small>
+                    <small id="NewPassword-help" class="text-danger" *ngIf="RegisterForm.controls['password'].getError('pattern')&&RegisterForm.controls['password'].touched"><br>La contraseña no cumple con los requerimientos establecidos</small>
+                    </div>
+                    <div class="w-4">
+                      <label for="phone" class="block text-900 text-xl font-medium my-3">Confirmar contraseña</label>
+                      <p-password formControlName="Confirmpassword" [toggleMask]="true" [ngClass]="{'ng-invalid ng-dirty':!RegisterForm.controls['password'].valid&&RegisterForm.controls['password'].touched}">
+                    </p-password>
+                    <small id="NewPassword-help">Ingrese la confirmacion esta debera ser igual al campo anterior</small>
+                    <small id="NewPassword-help" class="text-danger" *ngIf="RegisterForm.controls['Confirmpassword'].getError('required')&&RegisterForm.controls['Confirmpassword'].touched"><br>Este campo es obligatorio</small>
+                    <small id="NewPassword-help" class="text-danger" *ngIf="RegisterForm.controls['password'].value!==RegisterForm.controls['Confirmpassword'].value&&RegisterForm.controls['Confirmpassword'].touched"><br>Los campos de contraseña no coinciden</small>
+                    </div>
+                  </div>
+                  <button pButton pRipple label="Registrar" class="w-full p-3 text-xl align-self-center my-5" type="submit" [disabled]="!RegisterForm.valid"></button>
+                </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
