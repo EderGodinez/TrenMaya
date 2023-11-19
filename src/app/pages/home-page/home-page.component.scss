@@ -1,6 +1,8 @@
 ::ng-deep{
   .cards{
-    width: 450px;
+    min-width: 300px;
+    max-width: 450px;
+    //width: 450px;
     padding: 10px;
   }
   .p-card{
@@ -10,6 +12,12 @@
     display: flex;
     justify-content: center;
      margin:10px 0 ;
+  }
+  .boton{
+    width: auto;
+  }
+  .p-card-content{
+    display: flex;
   }
 }
 .imagenes{

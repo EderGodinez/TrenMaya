@@ -9,6 +9,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { InputTextModule } from 'primeng/inputtext';
 import { FileUploadModule } from 'primeng/fileupload';
 import { ToastModule } from 'primeng/toast';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 @NgModule({
   declarations: [],
   exports:[
@@ -21,7 +22,8 @@ import { ToastModule } from 'primeng/toast';
     DropdownModule,
     InputTextModule,
     FileUploadModule,
-    ToastModule
+    ToastModule,
+    ConfirmDialogModule
   ],
 
 })

@@ -17,12 +17,12 @@
     <span>Lo cual permitirá reducir los tiempos y costos del transporte de mercancías, pasajeros y turistas dentro de la península. Se construirán aproximadamente 1,525 km de vías férreas que atravesarán los estados de Tabasco, Chiapas, Campeche, Yucatán y Quintana Roo beneficiando el desarrollo en la región y en la calidad de vida de los habitantes.</span>
     <img src="" alt="">
   </div>
-  <div id="precios" class="flex justify-content-center gap-4 mx-8 mt-8" style="height: auto;width: auto;">
+  <div id="precios" class="flex flex-wrap justify-content-center gap-4 mx-8 mt-8" style="height: auto;width: auto;">
     <p-card *ngFor="let precio of Precios"  [header]="'Descuento sobre reservacion clientes '+precio.cliente" [subheader]="'Unicamente pagan el '+(100-precio.descuento)+'%'" class="cards">
       <ng-template pTemplate="header" class="flex align-items-center p-2 m-5">
           <img alt="usuario" [src]="precio.icono" class="imagenes" />
       </ng-template>
-      <p class="my-3">
+      <p class="mt-3">
          {{precio.description}}
         </p>
         <ng-template pTemplate="footer" class="mb-2">

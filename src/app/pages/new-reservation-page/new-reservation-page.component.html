@@ -1,5 +1,5 @@
-<p-toast [life]="4000" [position]="'top-left'"></p-toast>
-<form class="formgrid grid m-3" [formGroup]="reservationForm" (submit)="ReservarBoletos()">
+<p-toast [life]="10000" [position]="'top-left'"></p-toast>
+<form class="formgrid grid m-3" [formGroup]="reservationForm" (submit)="ConfirmTypeReserve()">
     <div class="field col-12 md:col-4 sm:col-12">
       <label for="firstname6">Email</label>
       <input id="firstname6" autocomplete="off" type="text" class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" formControlName="email">
@@ -18,17 +18,21 @@
     </div>
     <div class="field col-12 md:col-3 sm:col-12">
       <label for="lastname6">Origen</label>
-      <p-dropdown [options]="EstacionesOrigen"  optionLabel="nombre" optionValue="id" [showClear]="false" placeholder="Selecciona origen" formControlName="Origen"></p-dropdown>
+      <p-dropdown [options]="estacionesOrigenFiltradas"  optionLabel="nombre" optionValue="id" [showClear]="false" placeholder="Selecciona origen" formControlName="Origen" (onChange)="Update('Origen')"></p-dropdown>
     </div>
     <div class="field col-12 md:col-3 lg sm:col-12 flex flex-column">
       <label for="lastname6">Destino</label>
-      <p-dropdown [options]="EstacionesDestino"  optionLabel="nombre" optionValue="id" [showClear]="false" placeholder="Selecciona destino" formControlName="Destino"></p-dropdown>
+      <p-dropdown [options]="estacionesDestinoFiltradas"  optionLabel="nombre" optionValue="id" [showClear]="false" placeholder="Selecciona destino" formControlName="Destino" (onChange)="Update('Destino')"></p-dropdown>
     </div>
     <div class="field col-12 md:col-3 lg sm:col-12 pt-4">
-      <p-button label="Reservar" icon="" [style]="{'whidth':'400px'}" [classList]="'flex flex-grow-1'" type="submit" ></p-button>
+      <p-confirmDialog [style]="{width: '50vw'}" acceptLabel="Ahora" rejectLabel="Despues"></p-confirmDialog>
+      <p-button label="Reservar" icon="" [style]="{'whidth':'400px'}" [classList]="'flex flex-grow-1'" type="submit" [disabled]="!reservationForm.valid"></p-button>
     </div>
   </form>
 <div class="w-screen" style="height: 60vh;">
+  <div class="flex flex-row-reverse mr-8">
+    <h2>Total a pagar {{Total|currency}}</h2>
+  </div>
 <h2 class="m-4">Seleccion de asientos</h2>
 </div>
  <!-- Contenido de DTO DE API

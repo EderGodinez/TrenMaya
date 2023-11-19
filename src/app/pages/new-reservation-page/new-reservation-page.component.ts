@@ -3,8 +3,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ValidatorService } from '../../validators/validator.service';
 import { HttpClient } from '@angular/common/http';
 import { API_URL } from 'src/env/env';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService ,ConfirmEventType } from 'primeng/api';
 import {  ReservationResponse } from './interfaces/Reservation.interface';
+import { CalculateDistance } from './interfaces/CalculateDistance.interface';
 interface Estaciones{
   id:number
   Tramo:number
@@ -19,18 +20,19 @@ interface Horario{
 @Component({
   templateUrl: './new-reservation-page.component.html',
   styleUrls: ['./new-reservation-page.component.scss'],
-  providers:[MessageService]
+  providers:[MessageService,ConfirmationService]
 })
 export class NewReservationPageComponent implements OnInit {
-  constructor(private FormBuilder:FormBuilder,private ValidatorService:ValidatorService,private Http:HttpClient,private Message:MessageService){}
+  constructor(private FormBuilder:FormBuilder,private ValidatorService:ValidatorService,private Http:HttpClient,private Message:MessageService,private confirmationService: ConfirmationService){}
   ngOnInit(): void {
   }
+  Total:number=0
   reservationForm:FormGroup=this.FormBuilder.group({
     email:["eder.godinez@gmail.com",[Validators.required,Validators.pattern(this.ValidatorService.emailPattern)]],
     ID_Usuario:[1,Validators.required],
     ID_Tren:[1,Validators.required],
-    Origen:[1,Validators.required],
-    Destino:[2,Validators.required],
+    Origen:[,Validators.required],
+    Destino:[,Validators.required],
     Numero_Pasajeros:[12,[Validators.required,Validators.max(100)]],
     fecha_salida:["",Validators.required]
   })
@@ -74,6 +76,8 @@ export class NewReservationPageComponent implements OnInit {
     {id:37,Tramo: 7,nombre: 'Centenario', Estado:5, tipo:2}
 
   ]
+  estacionesOrigenFiltradas:Estaciones[]=this.EstacionesOrigen
+  estacionesDestinoFiltradas:Estaciones[]=this.EstacionesOrigen
 EstacionesDestino:Estaciones[]=[...this.EstacionesOrigen]
 Horarios:Horario[]=[
   {id:1,hora:'6:00 AM'},
@@ -83,9 +87,9 @@ Horarios:Horario[]=[
 get Today(){
   return new Date()
 }
+distance:number=0;
 ReservarBoletos(){
   if(!this.reservationForm.valid) return
-  console.log(typeof(this.reservationForm.controls['Numero_Pasajeros'].value))
   const fechaDesdeOriginal: string = this.reservationForm.controls['fecha_salida'].value;
 const fechaDesde: Date = new Date(fechaDesdeOriginal);
 const FechaFormateada: string = `${fechaDesde.getFullYear()}-${(fechaDesde.getMonth() + 1).toString().padStart(2, '0')}-${fechaDesde.getDate().toString().padStart(2, '0')}`;
@@ -102,5 +106,76 @@ this.reservationForm.controls['fecha_salida'].setValue(FechaFormateada)
       this.Message.add({severity:'error',detail:error.error.message ,summary:'Error al hacer reservacion'})
     }
   );
+}
+pendientReservation(){
+  const fechaDesdeOriginal: string = this.reservationForm.controls['fecha_salida'].value;
+const fechaDesde: Date = new Date(fechaDesdeOriginal);
+const FechaFormateada: string = `${fechaDesde.getFullYear()}-${(fechaDesde.getMonth() + 1).toString().padStart(2, '0')}-${fechaDesde.getDate().toString().padStart(2, '0')}`;
+this.reservationForm.controls['fecha_salida'].setValue(FechaFormateada)
+  //Todo:Realizar peticion a backend para registrar reservacion pendiente.
+  const formData = this.reservationForm.value;
+  this.Http.post<ReservationResponse>(`${API_URL}/reserves/pendient`,formData)
+  .subscribe(
+    (data) => {
+      this.Message.add({severity:data.summary,detail:data.message+' unicamente contaras 24h para confirmarla',summary:'Exito'})
+      this.reservationForm.reset()
+    },
+    (error) => {
+      this.Message.add({severity:'error',detail:error.error.message ,summary:'Error al hacer reservacion'})
+    }
+  );
+}
+ConfirmTypeReserve() {
+  this.confirmationService.confirm({
+      message: '¿Pagar ahora?',
+      header: 'Confirmacion de reservacion',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+          this.ReservarBoletos()
+      },
+      reject: (type:ConfirmEventType) => {
+          switch (type) {
+              case ConfirmEventType.REJECT:
+                  this.pendientReservation()
+                  break;
+          }
+      }
+  });
+}
+async Update(lista:string){
+  const origenid=this.reservationForm.controls['Origen'].value
+  const destinoid=this.reservationForm.controls['Destino'].value
+  if (lista==='Origen') {
+  this.estacionesDestinoFiltradas=this.EstacionesDestino.filter(estacion=>{
+    return estacion.id!=origenid
+  })
+  if (origenid&&destinoid) {
+    const resp:number=await this.CalculateTotal(origenid,destinoid);
+    this.Total=resp
+  }
+return
+}
+  this.estacionesOrigenFiltradas=this.EstacionesOrigen.filter(estacion=>{
+    estacion.id!=destinoid
+  })
+  if (origenid&&destinoid) {
+    const resp:number=await this.CalculateTotal(origenid,destinoid);
+    this.Total=resp
+  }
+}
+async CalculateTotal(origenid:number,destinoid:number):Promise<number>{
+  const TodoRecorrido=1100;
+  const KmTotal=1554;
+  const PriceKm=TodoRecorrido/KmTotal;
+await this.Http.get<number>(`${API_URL}/station/distance?origen=${origenid}&destino=${destinoid}`).subscribe(
+  (data) => {
+    this.distance=data
+  },
+  (error) => {
+    console.error('Error'+error)
+  }
+)
+console.log(this.distance)
+return this.distance*PriceKm;
 }
 }
