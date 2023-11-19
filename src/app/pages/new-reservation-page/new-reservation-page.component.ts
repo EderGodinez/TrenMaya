@@ -5,7 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { API_URL } from 'src/env/env';
 import { ConfirmationService, MessageService ,ConfirmEventType } from 'primeng/api';
 import {  ReservationResponse } from './interfaces/Reservation.interface';
-import { CalculateDistance } from './interfaces/CalculateDistance.interface';
+import { ReservationService } from '../../services/reserve.service';
 interface Estaciones{
   id:number
   Tramo:number
@@ -23,8 +23,11 @@ interface Horario{
   providers:[MessageService,ConfirmationService]
 })
 export class NewReservationPageComponent implements OnInit {
-  constructor(private FormBuilder:FormBuilder,private ValidatorService:ValidatorService,private Http:HttpClient,private Message:MessageService,private confirmationService: ConfirmationService){}
+  constructor(private FormBuilder:FormBuilder,private ValidatorService:ValidatorService,private Http:HttpClient,
+    private Message:MessageService,private confirmationService: ConfirmationService,private ReservationService:ReservationService){}
   ngOnInit(): void {
+    this.estacionesDestinoFiltradas=this.Estaciones
+    this.estacionesOrigenFiltradas=this.Estaciones
   }
   Total:number=0
   reservationForm:FormGroup=this.FormBuilder.group({
@@ -36,7 +39,7 @@ export class NewReservationPageComponent implements OnInit {
     Numero_Pasajeros:[12,[Validators.required,Validators.max(100)]],
     fecha_salida:["",Validators.required]
   })
-  EstacionesOrigen:Estaciones[]=[
+  Estaciones:Estaciones[]=[
     {id:1, Tramo:1, nombre:'Palenque', Estado:1,tipo: 1},
     {id:2, Tramo:1, nombre:'Boca del Cerro',Estado: 2,tipo: 1},
     {id:3, Tramo:1, nombre:'Tenosique', Estado:2, tipo:2},
@@ -76,9 +79,8 @@ export class NewReservationPageComponent implements OnInit {
     {id:37,Tramo: 7,nombre: 'Centenario', Estado:5, tipo:2}
 
   ]
-  estacionesOrigenFiltradas:Estaciones[]=this.EstacionesOrigen
-  estacionesDestinoFiltradas:Estaciones[]=this.EstacionesOrigen
-EstacionesDestino:Estaciones[]=[...this.EstacionesOrigen]
+  estacionesOrigenFiltradas:Estaciones[]=[]
+  estacionesDestinoFiltradas:Estaciones[]=[]
 Horarios:Horario[]=[
   {id:1,hora:'6:00 AM'},
   {id:2,hora:'10:00 AM'},
@@ -146,7 +148,7 @@ async Update(lista:string){
   const origenid=this.reservationForm.controls['Origen'].value
   const destinoid=this.reservationForm.controls['Destino'].value
   if (lista==='Origen') {
-  this.estacionesDestinoFiltradas=this.EstacionesDestino.filter(estacion=>{
+  this.estacionesDestinoFiltradas=this.Estaciones.filter(estacion=>{
     return estacion.id!=origenid
   })
   if (origenid&&destinoid) {
@@ -155,8 +157,8 @@ async Update(lista:string){
   }
 return
 }
-  this.estacionesOrigenFiltradas=this.EstacionesOrigen.filter(estacion=>{
-    estacion.id!=destinoid
+  this.estacionesOrigenFiltradas=this.Estaciones.filter(estacion=>{
+    return estacion.id!=destinoid
   })
   if (origenid&&destinoid) {
     const resp:number=await this.CalculateTotal(origenid,destinoid);
@@ -167,14 +169,12 @@ async CalculateTotal(origenid:number,destinoid:number):Promise<number>{
   const TodoRecorrido=1100;
   const KmTotal=1554;
   const PriceKm=TodoRecorrido/KmTotal;
-await this.Http.get<number>(`${API_URL}/station/distance?origen=${origenid}&destino=${destinoid}`).subscribe(
-  (data) => {
-    this.distance=data
-  },
-  (error) => {
-    console.error('Error'+error)
-  }
-)
+  console.log(origenid)
+  console.log(destinoid)
+this.ReservationService.getPrice(origenid,destinoid).subscribe((distancia)=>{
+  this.distance=distancia
+  console.log(this.distance)
+})
 console.log(this.distance)
 return this.distance*PriceKm;
 }

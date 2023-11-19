@@ -18,6 +18,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ValidatorService } from './validators/validator.service';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
+import { ReservationService } from './services/reserve.service';
+import { AuthService } from './services/auth.service';
+import { RegisterService } from './services/register.service';
 @NgModule({
   declarations: [
     AppComponent,
@@ -40,7 +43,7 @@ import { HttpClientModule } from '@angular/common/http';
     PrimeModule,
     FormsModule,
   ],
-  providers: [ValidatorService],
+  providers: [ValidatorService,ReservationService,AuthService,RegisterService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
