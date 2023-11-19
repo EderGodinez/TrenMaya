@@ -1,11 +1,11 @@
 :host ::ng-deep{
   .p-button{
-    background-color: black;
+    background-color:#0e4f26;
     border-color: aliceblue;
   }
   .p-button:hover{
-    background-color: darkgrey;
-    border-color: darkgrey;
+    background-color:#136c34;
+    border-color:#136c34;
     color: black;
   }
   .p-component{
@@ -13,6 +13,9 @@
   }
   .p-calendar{
     width: 80%;
+  }
+  .p-inputtext{
+    padding: 10px;
   }
 
 }
@@ -23,3 +26,4 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 input[type=number] { -moz-appearance:textfield; }
+

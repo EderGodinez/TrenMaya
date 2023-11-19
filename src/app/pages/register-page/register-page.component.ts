@@ -26,7 +26,7 @@ export class RegisterPageComponent {
     INE:[""],
     CURP:[""],
     birtdate:[new Date("11/01/2000"),[Validators.required]],
-    password:["123456789",[Validators.required,Validators.minLength(10),Validators.pattern(this.ValidatorService.passPattern)]],
+    password:["123456789",[Validators.required,Validators.minLength(10),Validators.minLength(10)]],
     Confirmpassword:["123456789"]
   })
   uploadedFile:any;
@@ -71,15 +71,6 @@ export class RegisterPageComponent {
       //se envian los datos a el backend
     }
     return
-  }
-  HasUpper(campo:string) {
-   return this.ValidatorService.HasUpper(campo);
-  }
-  HasNumber(campo:string) {
-    return this.ValidatorService.HasNumber(campo);
-  }
-  HasLower(campo:string) {
-    return this.ValidatorService.HasLower(campo);
   }
   esMayorDeEdad(fechaNacimiento:Date):boolean {
     const hoy = new Date();

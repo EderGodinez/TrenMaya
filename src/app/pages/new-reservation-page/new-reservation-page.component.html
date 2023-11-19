@@ -1,1 +1,43 @@
-<p>new-reservation-page works!</p>
+<p-toast [life]="4000" [position]="'top-left'"></p-toast>
+<form class="formgrid grid m-3" [formGroup]="reservationForm" (submit)="ReservarBoletos()">
+    <div class="field col-12 md:col-4 sm:col-12">
+      <label for="firstname6">Email</label>
+      <input id="firstname6" autocomplete="off" type="text" class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" formControlName="email">
+    </div>
+    <div class="field col-12 md:col-4 sm:col-12">
+      <label for="lastname6">Fecha de salida</label>
+      <p-calendar [showIcon]="true" id="calendario" formControlName="fecha_salida" dateFormat="yy/mm/dd"></p-calendar>
+    </div>
+    <div class="field col-12 md:col-4 sm:col-12">
+      <label for="lastname6">Numero de pasajeros</label>
+      <input id="lastname6" autocomplete="off" type="number" class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" formControlName="Numero_Pasajeros" >
+    </div>
+    <div class="field col-12 md:col-3 sm:col-12">
+      <label for="lastname6">Hora de salida</label>
+      <p-dropdown [options]="Horarios"  optionLabel="hora" optionValue="id" [showClear]="false" placeholder="Selecciona horario de salida" formControlName="ID_Tren"></p-dropdown>
+    </div>
+    <div class="field col-12 md:col-3 sm:col-12">
+      <label for="lastname6">Origen</label>
+      <p-dropdown [options]="EstacionesOrigen"  optionLabel="nombre" optionValue="id" [showClear]="false" placeholder="Selecciona origen" formControlName="Origen"></p-dropdown>
+    </div>
+    <div class="field col-12 md:col-3 lg sm:col-12 flex flex-column">
+      <label for="lastname6">Destino</label>
+      <p-dropdown [options]="EstacionesDestino"  optionLabel="nombre" optionValue="id" [showClear]="false" placeholder="Selecciona destino" formControlName="Destino"></p-dropdown>
+    </div>
+    <div class="field col-12 md:col-3 lg sm:col-12 pt-4">
+      <p-button label="Reservar" icon="" [style]="{'whidth':'400px'}" [classList]="'flex flex-grow-1'" type="submit" ></p-button>
+    </div>
+  </form>
+<div class="w-screen" style="height: 60vh;">
+<h2 class="m-4">Seleccion de asientos</h2>
+</div>
+ <!-- Contenido de DTO DE API
+    email:string
+    ID_Usuario?:number
+    ID_Tren:number
+    Origen:number
+    Destino:number
+    Numero_Pasajeros:number
+    fecha_salida:Date -->
+
+

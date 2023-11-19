@@ -1,1 +1,35 @@
-<p>view-reservations works!</p>
+<div *ngIf="Reservations.length>0;else NoOrders" class="p-8">
+  <h1>Mis pedidos</h1>
+  <hr>
+  <!-- order table -->
+  <div style="height: 60vh;">
+    <table class="my-table">
+      <thead>
+        <tr>
+          <th>Fecha de reservacion</th>
+          <th>Fecha de salida</th>
+          <th>Origen</th>
+          <th>Destino</th>
+          <th>Pasajeros</th>
+          <th>Total pagado</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let reserve of Reservations">
+          <td>{{ reserve.FechaReserva |date:'longDate'}}</td>
+          <td>{{ reserve.FechaSalida |date:'longDate'}}</td>
+          <td>{{ reserve.Origen }}</td>
+          <td>{{ reserve.Destino }}</td>
+          <td>{{ reserve.Pasajeros }}</td>
+          <td>{{ reserve.Total |currency:'MXN'}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  </div>
+  <ng-template #NoOrders>
+    <div class="w-full flex flex-column flex-wrap align-items-center my-5" style="height: 50vh;">
+      <h1>Sin reservaciones registradas</h1>
+    </div>
+  </ng-template>
+

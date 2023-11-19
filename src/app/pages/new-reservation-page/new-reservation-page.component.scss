@@ -1,0 +1,26 @@
+::ng-deep{
+
+  .p-calendar{
+    padding: 0;
+  }
+  .p-inputtext{
+    padding: 0;
+    width: 150%;
+  }
+.p-datepicker-trigger{
+  padding: 9px;
+}
+.p-dropdown{
+  padding: 7px;
+  width: 100%;
+}
+}
+.p-button{
+  width: 450px;
+
+}
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}

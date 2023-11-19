@@ -1,0 +1,16 @@
+.my-table {
+  margin: auto;
+  width: 80%; /* Tamaño de la tabla al 100% del contenedor */
+  border-collapse: collapse; /* Bordes de celdas colapsados */
+}
+
+.my-table th, .my-table td {
+  text-align: center; /* Alineación de texto en el centro de las celdas */
+  padding: 8px; /* Espaciado interno de las celdas */
+  border: 1px solid #ddd; /* Borde de las celdas */
+}
+
+.my-table th {
+  background-color: #f2f2f2; /* Fondo de las celdas de encabezado */
+}
+
