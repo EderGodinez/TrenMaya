@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import {RegisterPageService} from '../register-page/register-page.service'
 import { FormBuilder,FormGroup,Validators} from '@angular/forms';
 import { ValidatorService } from '../../validators/validator.service';
 import { MessageService } from 'primeng/api';
 import { UploadEvent } from 'primeng/fileupload';
+import { RegisterService } from '../../services/register.service';
+import { UserInfo,User } from '../../interfaces/UserInfo.interface';
 interface states{
   id:number
   abr:string
@@ -17,7 +18,7 @@ interface states{
   providers: [MessageService]
 })
 export class RegisterPageComponent {
-  constructor(private router:Router,private RegisterPageService: RegisterPageService,private FormBuilder:FormBuilder,private ValidatorService:ValidatorService,private messageService: MessageService){}
+  constructor(private router:Router,private RegisterService: RegisterService,private FormBuilder:FormBuilder,private ValidatorService:ValidatorService,private messageService: MessageService){}
   public RegisterForm:FormGroup=this.FormBuilder.group({
     email:["eder.godinez26@gmail.com",[Validators.required,Validators.pattern(this.ValidatorService.emailPattern)]],
     username:["Eder Yair",[Validators.required,Validators.pattern(this.ValidatorService.firstNameAndLastnamePattern)]],
@@ -29,8 +30,6 @@ export class RegisterPageComponent {
     password:["123456789",[Validators.required,Validators.minLength(10),Validators.minLength(10)]],
     Confirmpassword:["123456789"]
   })
-  uploadedFile:any;
-
   States:states[] = [
   { id: 1, abr: 'CHP', nombre: 'Chiapas' },
   { id: 2, abr: 'TAB', nombre: 'Tabasco' },
@@ -65,10 +64,28 @@ export class RegisterPageComponent {
   { id: 31, abr: 'VER', nombre: 'Veracruz' },
   { id: 32, abr: 'ZAC', nombre: 'Zacatecas' },
 ];
-  VerifyAccount(){
+  async CreateAccount(){
     if (this.RegisterForm.valid) {
-      console.log(this.RegisterForm.value)
-      //se envian los datos a el backend
+      const fechanac: string = this.RegisterForm.controls['birtdate'].value;
+      const fecha: Date = new Date(fechanac);
+      const FechaFormateada: string = `${fecha.getFullYear()}-${(fecha.getMonth() + 1).toString().padStart(2, '0')}-${fecha.getDate().toString().padStart(2, '0')}`;
+      this.RegisterForm.controls['birtdate'].setValue(FechaFormateada)
+      const formData = { ...this.RegisterForm.value };
+      const {email,username,lastname,state,INE,CURP,birtdate,password}=formData
+      const UserInfo:UserInfo=new User(`${username} ${lastname}`,password,email,CURP,state,birtdate,INE)
+      this.RegisterService.createAccount(UserInfo).subscribe(
+        (response)=>{
+          console.log(response.message)
+          this.messageService.add({severity: 'success',life:5000,summary:'Cuenta creada con exito',detail:response.message})
+          setTimeout(() => {
+            this.router.navigateByUrl('TrenMaya/Login')
+          }, 5000);
+        },
+        (error) => {
+          // Este bloque se ejecuta en caso de error en la solicitud HTTP
+          this.messageService.add({severity:'error',life:5000,summary:'Error al tratar de crear cuenta',detail:error.error.message,icon:'pi pi-times'})
+        }
+      )
     }
     return
   }
@@ -87,7 +104,6 @@ export class RegisterPageComponent {
     return edad >= 18;
 }
 onUpload(event: UploadEvent) {
-
 this.RegisterForm.controls['INE'].setValue(event.originalEvent)
 console.log(this.RegisterForm.value)
   this.messageService.add({ severity: 'success', summary: 'Archivo subido', detail: 'Archivo guardado con exito' });

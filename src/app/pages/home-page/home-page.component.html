@@ -18,7 +18,7 @@
     <img src="" alt="">
   </div>
   <div id="precios" class="flex flex-wrap justify-content-center gap-4 mx-8 mt-8" style="height: auto;width: auto;">
-    <p-card *ngFor="let precio of Precios"  [header]="'Descuento sobre reservacion clientes '+precio.cliente" [subheader]="'Unicamente pagan el '+(100-precio.descuento)+'%'" class="cards">
+    <p-card *ngFor="let precio of Precios"  [header]="precio.cliente" [subheader]="'Pagan el '+(100-precio.descuento)+'%'" class="cards">
       <ng-template pTemplate="header" class="flex align-items-center p-2 m-5">
           <img alt="usuario" [src]="precio.icono" class="imagenes" />
       </ng-template>
@@ -26,7 +26,7 @@
          {{precio.description}}
         </p>
         <ng-template pTemplate="footer" class="mb-2">
-        <p-button label="Agendar" icon="pi pi-calendar-minus" [styleClass]="'p-2'" (onClick)="GoReservations()"></p-button>
+        <p-button label="Agendar" icon="pi pi-calendar-minus" [styleClass]="'p-2 boton'" (onClick)="GoReservations()" [style]="{'margin':'0 30px'}"></p-button>
       </ng-template>
   </p-card>
   </div>

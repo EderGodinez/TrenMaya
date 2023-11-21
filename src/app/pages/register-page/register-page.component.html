@@ -10,24 +10,24 @@
                   <span class="text-600 font-medium">Crear una cuenta</span>
               </div>
               <div class="flex flex-column">
-                <form (ngSubmit)="VerifyAccount()" [formGroup]="RegisterForm">
+                <form (ngSubmit)="CreateAccount()" [formGroup]="RegisterForm">
 
                   <label for="email1" class="block text-900 text-xl font-medium mb-3">Correo</label>
-                  <input id="email1" type="text" placeholder="Correo electronico" pInputText class="w-full" style="padding:1rem;" formControlName="email">
+                  <input id="email1" type="text" placeholder="Correo electronico" pInputText class="w-full" style="padding:1rem;" formControlName="email" autocomplete="off">
                   <small>Ingresa correo electronico</small>
                   <small id="NewPassword-help" class="text-danger" *ngIf="RegisterForm.controls['email'].getError('required')&&RegisterForm.controls['email'].touched"><br>Este campo es obligatorio</small>
                   <small id="NewPassword-help" class="text-danger" *ngIf="RegisterForm.controls['email'].getError('pattern')&&RegisterForm.controls['email'].touched"><br>No cuenta con un formato de correo valido</small>
                   <div class="flex gap-4 justify-content-start w-full">
                     <div class="w-6">
                       <label for="name" class="block text-900 text-xl font-medium my-3">Nombres</label>
-                      <input id="nane" type="text" placeholder="Nombres" pInputText class="w-full" style="padding:1rem" formControlName="username">
+                      <input id="nane" type="text" placeholder="Nombres" pInputText class="w-full" style="padding:1rem" formControlName="username" autocomplete="off">
                       <small class="font-medium">Ingresar nombre de usuario </small>
                       <small *ngIf="RegisterForm.controls['username'].getError('required')&&RegisterForm.controls['username'].touched" class="text-danger font-medium"><br>Este campo es obligatorio</small>
                       <small id="NewPassword-help" class="text-danger" *ngIf="RegisterForm.controls['username'].getError('pattern')&&RegisterForm.controls['username'].touched"><br>No cuenta con un formato de uno o dos nombres o los nombres son invalidos</small>
                     </div>
                     <div class="w-6">
                       <label for="lastname" class="block text-900 text-xl font-medium my-3">Apellidos</label>
-                      <input id="lastname" type="text" placeholder="Apellidos" pInputText class="w-full" style="padding:1rem"formControlName="lastname">
+                      <input id="lastname" type="text" placeholder="Apellidos" pInputText class="w-full" style="padding:1rem"formControlName="lastname" autocomplete="off">
                       <small class="font-medium">Ingresar apellidos de usuario </small>
                       <small *ngIf="RegisterForm.controls['lastname'].getError('required')&&RegisterForm.controls['lastname'].touched" class="text-danger font-medium"><br>Este campo es obligatorio</small>
                       <small id="NewPassword-help" class="text-danger" *ngIf="RegisterForm.controls['lastname'].getError('pattern')&&RegisterForm.controls['lastname'].touched"><br>No cuenta con un formato de uno o dos apellidos o los apellidos son invalidos</small>
@@ -45,7 +45,7 @@
                   <div class="flex gap-4 justify-content-start w-full">
                     <div class="w-6">
                       <label for="curp" class="block text-900 text-xl font-medium my-3">CURP</label>
-                      <input id="curp" type="text" placeholder="Nombres" pInputText class="w-full" style="padding:1rem" formControlName="CURP">
+                      <input id="curp" type="text" placeholder="Nombres" pInputText class="w-full" style="padding:1rem" formControlName="CURP" autocomplete="off">
                       <small class="font-medium">CURP de usuario mexicano </small>
                       <small *ngIf="RegisterForm.controls['username'].getError('required')&&RegisterForm.controls['username'].touched" class="text-danger font-medium"><br>Este campo es obligatorio</small>
                       <small id="NewPassword-help" class="text-danger" *ngIf="RegisterForm.controls['username'].getError('pattern')&&RegisterForm.controls['username'].touched"><br>No cuenta con un formato de uno o dos nombres o los nombres son invalidos</small>

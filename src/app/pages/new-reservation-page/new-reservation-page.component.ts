@@ -4,14 +4,11 @@ import { ValidatorService } from '../../validators/validator.service';
 import { HttpClient } from '@angular/common/http';
 import { API_URL } from 'src/env/env';
 import { ConfirmationService, MessageService ,ConfirmEventType } from 'primeng/api';
-import {  ReservationResponse } from './interfaces/Reservation.interface';
+import {  ReservationResponse } from '../../interfaces/Reservation.interface';
 import { ReservationService } from '../../services/reserve.service';
 interface Estaciones{
   id:number
-  Tramo:number
   nombre:string
-  Estado:number
-  tipo:number
 }
 interface Horario{
   id:number
@@ -24,12 +21,19 @@ interface Horario{
 })
 export class NewReservationPageComponent implements OnInit {
   constructor(private FormBuilder:FormBuilder,private ValidatorService:ValidatorService,private Http:HttpClient,
-    private Message:MessageService,private confirmationService: ConfirmationService,private ReservationService:ReservationService){}
+    private Message:MessageService,private confirmationService: ConfirmationService,private ReservationService:ReservationService){
+      this.Today = new Date();
+      this.HasDiscount=true
+      this.descuento=30
+    }
   ngOnInit(): void {
     this.estacionesDestinoFiltradas=this.Estaciones
     this.estacionesOrigenFiltradas=this.Estaciones
   }
+  descuento:number;
   Total:number=0
+  HasDiscount:boolean;
+  Subtotal:number=0
   reservationForm:FormGroup=this.FormBuilder.group({
     email:["eder.godinez@gmail.com",[Validators.required,Validators.pattern(this.ValidatorService.emailPattern)]],
     ID_Usuario:[1,Validators.required],
@@ -40,43 +44,43 @@ export class NewReservationPageComponent implements OnInit {
     fecha_salida:["",Validators.required]
   })
   Estaciones:Estaciones[]=[
-    {id:1, Tramo:1, nombre:'Palenque', Estado:1,tipo: 1},
-    {id:2, Tramo:1, nombre:'Boca del Cerro',Estado: 2,tipo: 1},
-    {id:3, Tramo:1, nombre:'Tenosique', Estado:2, tipo:2},
-    {id:4, Tramo:1, nombre:'El Triunfo',Estado: 2, tipo:1},
-    {id:5, Tramo:1, nombre:'Candelaria', Estado:2,tipo: 2},
-    {id:6, Tramo:2, nombre:'Escarcega',Estado: 3,tipo:1},
-    {id:7, Tramo:2, nombre:'Carrillo Puerto', Estado:3,tipo: 2},
-    {id:8, Tramo:2, nombre:'Edzna', Estado:3, tipo:1},
-    {id:9, Tramo:2, nombre:'San Francisco de Campeche', Estado:3, tipo:1},
-    {id:10,Tramo: 2,nombre: 'Tenabo',Estado: 3, tipo:2},
-    {id:11,Tramo: 2,nombre: 'Hecelchakan',Estado: 3, tipo:2},
-    {id:12,Tramo: 2,nombre: 'Calkini', Estado:3, tipo:2},
-    {id:13,Tramo: 3,nombre: 'Maxcanu',Estado: 4, tipo:2},
-    {id:14,Tramo: 3,nombre: 'Merida Aeropuerto',Estado: 4, tipo:1},
-    {id:15,Tramo: 3,nombre: 'Teya', Estado:4, tipo:1},
-    {id:16,Tramo: 3,nombre: 'Tixkokob', Estado:4, tipo:2},
-    {id:17,Tramo: 3,nombre: 'Izamal', Estado:4, tipo:1},
-    {id:18,Tramo: 4,nombre: 'Chichen Itza',Estado: 4,tipo: 1},
-    {id:19,Tramo: 4,nombre: 'Valladolid',Estado: 4, tipo:1},
-    {id:20,Tramo: 4,nombre: 'Xibalba',Estado: 4, tipo:2},
-    {id:21,Tramo: 4,nombre: 'Nuevo Xcan',Estado: 5, tipo:1},
-    {id:22,Tramo: 4,nombre: 'Leona Vicario',Estado: 4, tipo:2},
-    {id:23,Tramo: 5,nombre: 'Cancun Aeropuerto',Estado: 5,tipo: 1},
-    {id:24,Tramo: 5,nombre: 'Puerto Morelos', Estado:5, tipo:1},
-    {id:25,Tramo: 5,nombre: 'Playa del Carmen', Estado:5, tipo:1},
-    {id:26,Tramo: 5,nombre: 'Xcaret', Estado:5, tipo:2},
-    {id:27,Tramo: 5,nombre: 'Puerto Aventuras', Estado:5, tipo:2},
-    {id:28,Tramo: 5,nombre: 'Akumal',Estado: 5, tipo:2},
-    {id:29,Tramo: 5,nombre: 'Tulum', Estado:5, tipo:1},
-    {id:30,Tramo: 5,nombre: 'Quintana Roo Tulum Aeropuerto', Estado:5, tipo:2},
-    {id:31,Tramo: 6,nombre: 'Felipe Carrillo Puerto',Estado: 5, tipo:1},
-    {id:32,Tramo: 6,nombre: 'Limones(Othon P. Blanco)', Estado:5, tipo:2},
-    {id:33,Tramo: 6,nombre: 'Bacalar',Estado: 5, tipo:1},
-    {id:34,Tramo: 6,nombre: 'Chetumal',Estado: 5, tipo:1},
-    {id:35,Tramo: 7,nombre: 'Xpujil', Estado:5, tipo:1},
-    {id:36,Tramo: 7,nombre: 'Conhuas', Estado:5, tipo:2},
-    {id:37,Tramo: 7,nombre: 'Centenario', Estado:5, tipo:2}
+    {id:1, nombre:'Palenque'},
+    {id:2, nombre:'Boca del Cerro'},
+    {id:3, nombre:'Tenosique'},
+    {id:4, nombre:'El Triunfo'},
+    {id:5, nombre:'Candelaria'},
+    {id:6, nombre:'Escarcega'},
+    {id:7, nombre:'Carrillo Puerto',},
+    {id:8, nombre:'Edzna'},
+    {id:9, nombre:'San Francisco de Campeche',},
+    {id:10,nombre: 'Tenabo'},
+    {id:11,nombre: 'Hecelchakan'},
+    {id:12,nombre: 'Calkini'},
+    {id:13,nombre: 'Maxcanu'},
+    {id:14,nombre: 'Merida Aeropuerto'},
+    {id:15,nombre: 'Teya'},
+    {id:16,nombre: 'Tixkokob'},
+    {id:17,nombre: 'Izamal'},
+    {id:18,nombre: 'Chichen Itza'},
+    {id:19,nombre: 'Valladolid'},
+    {id:20,nombre: 'Xibalba'},
+    {id:21,nombre: 'Nuevo Xcan'},
+    {id:22,nombre: 'Leona Vicario'},
+    {id:23,nombre: 'Cancun Aeropuerto'},
+    {id:24,nombre: 'Puerto Morelos'},
+    {id:25,nombre: 'Playa del Carmen'},
+    {id:26,nombre: 'Xcaret'},
+    {id:27,nombre: 'Puerto Aventuras'},
+    {id:28,nombre: 'Akumal'},
+    {id:29,nombre: 'Tulum'},
+    {id:30,nombre: 'Quintana Roo Tulum Aeropuerto'},
+    {id:31,nombre: 'Felipe Carrillo Puerto'},
+    {id:32,nombre: 'Limones(Othon P. Blanco)'},
+    {id:33,nombre: 'Bacalar'},
+    {id:34,nombre: 'Chetumal'},
+    {id:35,nombre: 'Xpujil'},
+    {id:36,nombre: 'Conhuas' },
+    {id:37,nombre: 'Centenario'}
 
   ]
   estacionesOrigenFiltradas:Estaciones[]=[]
@@ -86,10 +90,7 @@ Horarios:Horario[]=[
   {id:2,hora:'10:00 AM'},
   {id:3,hora:'2:00 PM'},
 ]
-get Today(){
-  return new Date()
-}
-distance:number=0;
+Today:Date;
 ReservarBoletos(){
   if(!this.reservationForm.valid) return
   const fechaDesdeOriginal: string = this.reservationForm.controls['fecha_salida'].value;
@@ -152,8 +153,7 @@ async Update(lista:string){
     return estacion.id!=origenid
   })
   if (origenid&&destinoid) {
-    const resp:number=await this.CalculateTotal(origenid,destinoid);
-    this.Total=resp
+    this.CalculateTotal(origenid,destinoid)
   }
 return
 }
@@ -161,21 +161,15 @@ return
     return estacion.id!=destinoid
   })
   if (origenid&&destinoid) {
-    const resp:number=await this.CalculateTotal(origenid,destinoid);
-    this.Total=resp
+    this.CalculateTotal(origenid,destinoid);
   }
 }
-async CalculateTotal(origenid:number,destinoid:number):Promise<number>{
+CalculateTotal(origenid:number,destinoid:number){
   const TodoRecorrido=1100;
   const KmTotal=1554;
   const PriceKm=TodoRecorrido/KmTotal;
-  console.log(origenid)
-  console.log(destinoid)
 this.ReservationService.getPrice(origenid,destinoid).subscribe((distancia)=>{
-  this.distance=distancia
-  console.log(this.distance)
+  this.Total=distancia*PriceKm;
 })
-console.log(this.distance)
-return this.distance*PriceKm;
 }
 }

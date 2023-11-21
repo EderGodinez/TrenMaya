@@ -10,8 +10,9 @@ interface Precios{
   templateUrl: './home-page.component.html',
   styleUrls: ['./home-page.component.scss']
 })
-export class HomePageComponent {
-  constructor(private Router:Router){}
+export class HomePageComponent{
+  constructor(private Router:Router){
+  }
 Precios:Precios[]=[
   {
     cliente:"locales",
@@ -26,10 +27,10 @@ Precios:Precios[]=[
     description:"Los cliente que cuenten con una documento oficial de ser Mexicanos se le otorgara un descuento por el 30% ya sea con una CURP o con un documento oficial."
   },
   {
-    cliente:"internacionales o no registrados",
+    cliente:"Internacionales/no registrados",
     descuento:0,
     icono:"assets/internacional.png",
-    description:"Todos los clientes que no cuenten con una cuenta creada o que sean fuera del pais se le cobrara una cuota completa de 1100 por recorrer los 7 tramos"
+    description:"Todos los clientes que no cuenten con una cuenta creada o que sean fuera del pais se le cobrara una cuota completa de $1100.00 por recorrido completo"
   }
 ]
 GoReservations(){

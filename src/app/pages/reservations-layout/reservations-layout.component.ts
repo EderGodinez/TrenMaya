@@ -6,4 +6,8 @@ import { Router } from '@angular/router';
   styleUrls: ['./reservations-layout.component.scss']
 })
 export class ReservationsLayoutComponent {
+  constructor(){
+this.Islog=true
+  }
+  Islog:boolean;
 }
