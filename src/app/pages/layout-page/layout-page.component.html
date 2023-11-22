@@ -3,6 +3,9 @@
   <h1 class="text-white">Tren Maya</h1>
   <div class="flex flex-wrap">
     <p-tabMenu [model]="items" [activeItem]="activeItem" (activeItemChange)="onActiveItemChange($event)"></p-tabMenu>
+    <div *ngIf="islog" class="relative p-2 text-white cursor-pointer font-bold">
+      <span style="font-size: x-large;" class="logout"(click)="logOut()"><i class="pi pi-sign-in"></i>Cerrar sesion</span>
+    </div>
     <h2 *ngIf="islog" class="mr-4 pt-2 text-white">Hola, {{Username}}</h2>
   </div>
 </div>

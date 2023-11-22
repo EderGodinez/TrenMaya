@@ -17,6 +17,19 @@
     color: rgb(255, 255, 255);
     background: none;
   }
+    .logout::before{
+    content: "";
+    width: 175px;
+    height: 2px;
+    background-color: aliceblue;
+    position:absolute;
+    bottom: 10px;
+    left: 12px;
+  }
+  .logout:hover::before {
+    background-color: rgb(175, 175, 175); /* Cambia el color a azul cuando se hace hover */
+}
+
 
 
 }

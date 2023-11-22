@@ -23,16 +23,27 @@ export class NewReservationPageComponent implements OnInit {
   constructor(private FormBuilder:FormBuilder,private ValidatorService:ValidatorService,private Http:HttpClient,
     private Message:MessageService,private confirmationService: ConfirmationService,private ReservationService:ReservationService){
       this.Today = new Date();
-      this.HasDiscount=true
-      this.descuento=30
+      const token=localStorage.getItem('token')
+
+      const Userstate:string|null=localStorage.getItem('UserState')
+      const localStates:number[]=[1,2,3,4,5]
+      if (token&&Userstate!==null){
+        this.HasDiscount=true
+        const userStateNumber = parseInt(Userstate, 10);
+        if(localStates.includes(userStateNumber)){
+          this.descuento=75
+        }
+        else
+        this.descuento=30
+      }
     }
   ngOnInit(): void {
     this.estacionesDestinoFiltradas=this.Estaciones
     this.estacionesOrigenFiltradas=this.Estaciones
   }
-  descuento:number;
+  descuento:number=0;
   Total:number=0
-  HasDiscount:boolean;
+  HasDiscount:boolean=false;
   Subtotal:number=0
   reservationForm:FormGroup=this.FormBuilder.group({
     email:["eder.godinez@gmail.com",[Validators.required,Validators.pattern(this.ValidatorService.emailPattern)]],
@@ -148,6 +159,7 @@ ConfirmTypeReserve() {
 async Update(lista:string){
   const origenid=this.reservationForm.controls['Origen'].value
   const destinoid=this.reservationForm.controls['Destino'].value
+  console.log(this.HasDiscount)
   if (lista==='Origen') {
   this.estacionesDestinoFiltradas=this.Estaciones.filter(estacion=>{
     return estacion.id!=origenid

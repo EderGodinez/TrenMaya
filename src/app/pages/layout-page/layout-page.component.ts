@@ -51,4 +51,8 @@ export class LayoutPageComponent {
         }
       });
   }
+  logOut(){
+    localStorage.clear()
+    location.reload()
+  }
 }
