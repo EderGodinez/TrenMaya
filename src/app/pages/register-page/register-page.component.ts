@@ -20,15 +20,15 @@ interface states{
 export class RegisterPageComponent {
   constructor(private router:Router,private RegisterService: RegisterService,private FormBuilder:FormBuilder,private ValidatorService:ValidatorService,private messageService: MessageService){}
   public RegisterForm:FormGroup=this.FormBuilder.group({
-    email:["eder.godinez26@gmail.com",[Validators.required,Validators.pattern(this.ValidatorService.emailPattern)]],
-    username:["Eder Yair",[Validators.required,Validators.pattern(this.ValidatorService.firstNameAndLastnamePattern)]],
-    lastname:["Godinez Salazar",[Validators.required,Validators.pattern(this.ValidatorService.firstNameAndLastnamePattern)]],
+    email:["",[Validators.required,Validators.pattern(this.ValidatorService.emailPattern)]],
+    username:["",[Validators.required,Validators.pattern(this.ValidatorService.firstNameAndLastnamePattern)]],
+    lastname:["",[Validators.required,Validators.pattern(this.ValidatorService.firstNameAndLastnamePattern)]],
     state:[0,[Validators.required]],
     INE:[""],
     CURP:[""],
-    birtdate:[new Date("11/01/2000"),[Validators.required]],
-    password:["123456789",[Validators.required,Validators.minLength(10),Validators.minLength(10)]],
-    Confirmpassword:["123456789"]
+    birtdate:[new Date("0"),[Validators.required]],
+    password:["",[Validators.required,Validators.minLength(10),Validators.minLength(10)]],
+    Confirmpassword:[""]
   })
   States:states[] = [
   { id: 1, abr: 'CHP', nombre: 'Chiapas' },
@@ -75,7 +75,6 @@ export class RegisterPageComponent {
       const UserInfo:UserInfo=new User(`${username} ${lastname}`,password,email,CURP,state,birtdate,INE)
       this.RegisterService.createAccount(UserInfo).subscribe(
         (response)=>{
-          console.log(response.message)
           this.messageService.add({severity: 'success',life:5000,summary:'Cuenta creada con exito',detail:response.message})
           setTimeout(() => {
             this.router.navigateByUrl('TrenMaya/Login')

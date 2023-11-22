@@ -1,11 +1,12 @@
+<p-toast></p-toast>
 <div class="flex justify-content-end gap-3 flex-wrap mr-2 my-3">
   <p-button label=" Nueva reservacion" icon="pi pi-plus" routerLink="NewReservation" ></p-button>
   <p-button label=" Ver reservaciones" icon="pi pi-calendar "routerLink="View" ></p-button>
-  <p-button label=" Consultar reservaciones" icon="pi pi-eye" routerLink="View" *ngIf="!Islog"></p-button>
+  <p-button label=" Consultar reservaciones" icon="pi pi-eye" routerLink="View" *ngIf="!Islog" (onClick)="searchReservations()"></p-button>
 <div *ngIf="!Islog">
   <span class="p-input-icon-right flex">
     <i class="pi pi-search"></i>
-    <input type="text" pInputText style="width: 350px; padding: 10px;"/>
+    <input type="text" pInputText style="width: 350px; padding: 10px;" [(ngModel)]="userEmail"/>
 </span>
 <small>Introduce un correo para consultar reservaciones</small>
 </div>

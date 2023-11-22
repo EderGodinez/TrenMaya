@@ -21,6 +21,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { ReservationService } from './services/reserve.service';
 import { AuthService } from './services/auth.service';
 import { RegisterService } from './services/register.service';
+import { MessageService } from 'primeng/api';
 @NgModule({
   declarations: [
     AppComponent,
@@ -43,7 +44,7 @@ import { RegisterService } from './services/register.service';
     PrimeModule,
     FormsModule,
   ],
-  providers: [ValidatorService,ReservationService,AuthService,RegisterService],
+  providers: [ValidatorService,ReservationService,AuthService,RegisterService,MessageService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

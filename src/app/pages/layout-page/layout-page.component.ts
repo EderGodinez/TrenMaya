@@ -16,6 +16,8 @@ export class LayoutPageComponent {
     if (this.islog) {
      this.getUserInfo(token!)
     }
+    else
+    localStorage.setItem('Userid','1')
 
   }
   ngOnInit() {
@@ -41,6 +43,7 @@ export class LayoutPageComponent {
       this.Username=info.rest.userName.split(' ')[0]
       localStorage.setItem('UserState',info.rest.Estado.toString())
       localStorage.setItem('Useremail',info.rest.email)
+      localStorage.setItem('Userid',info.rest.id.toString())
      })
   }
   validateToken(Token:string){

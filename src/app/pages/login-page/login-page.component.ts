@@ -13,8 +13,8 @@ import { MessageService } from 'primeng/api';
 export class LoginPageComponent {
   constructor(private FormBuilder:FormBuilder,private ValidatorService:ValidatorService,private AuthService:AuthService,private router:Router,private MessageService:MessageService){}
   public loginForm:FormGroup=this.FormBuilder.group({
-    email:["eder.godinez26@gmail.com",[Validators.required,Validators.pattern(this.ValidatorService.emailPattern)]],
-    pass:["123456789",[Validators.required]]
+    email:["",[Validators.required,Validators.pattern(this.ValidatorService.emailPattern)]],
+    pass:["",[Validators.required]]
   })
   async signIn(){
     if (!this.loginForm.valid) return
