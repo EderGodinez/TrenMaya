@@ -34,16 +34,18 @@ export class ViewReservationsComponent {
     this.AuthService.userEmail$.subscribe((email) => {
       const correo=this.userEmail;
       this.userEmail = email;
-      if (correo!==this.userEmail) {
+      console.log(this.userEmail)
+      console.log(this.userid)
         this.Reservations=[]
         this.PendientReservations=[]
      this.showReserves(this.userEmail!,this.userid!);
-      }
-
+     console.log(this.Reservations)
+     console.log(this.PendientReservations)
     });
   }
   showReserves(useremail:string,userid:string){
     this.ReservationService.getReserves(useremail,userid).subscribe((reservation)=>{
+      console.log(reservation)
       reservation.forEach((reserve)=>{
         const reservacion:Reserve={
           FechaReserva:new Date(reserve.Fecha_Reserva),
@@ -52,7 +54,7 @@ export class ViewReservationsComponent {
           Origen:reserve.Origen.nombre,
           Pasajeros:reserve.Numero_pasajeros,
           status:'pagado',
-          Total:1100,
+          Total:reserve.Total,
         }
         this.Reservations.push(reservacion)
       })
@@ -66,7 +68,7 @@ export class ViewReservationsComponent {
           Origen:pendient.Origen.nombre,
           Pasajeros:pendient.Numero_pasajeros,
           status:'pendiente',
-          Total:1100,
+          Total:pendient.Total,
         }
         this.PendientReservations.push(reservation)
       })

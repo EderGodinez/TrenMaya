@@ -52,7 +52,8 @@ export class NewReservationPageComponent implements OnInit {
     Origen:[,Validators.required],
     Destino:[,Validators.required],
     Numero_Pasajeros:[12,[Validators.required,Validators.max(100)]],
-    fecha_salida:["",Validators.required]
+    fecha_salida:["",Validators.required],
+    Total:[0]
   })
   Estaciones:Estaciones[]=[
     {id:1, nombre:'Palenque'},
@@ -103,13 +104,17 @@ Horarios:Horario[]=[
 ]
 Today:Date;
 ReservarBoletos(){
-  if(!this.reservationForm.valid) return
+  if(!this.reservationForm.valid) 
+    return
   const fechaDesdeOriginal: string = this.reservationForm.controls['fecha_salida'].value;
 const fechaDesde: Date = new Date(fechaDesdeOriginal);
 const FechaFormateada: string = `${fechaDesde.getFullYear()}-${(fechaDesde.getMonth() + 1).toString().padStart(2, '0')}-${fechaDesde.getDate().toString().padStart(2, '0')}`;
 this.reservationForm.controls['fecha_salida'].setValue(FechaFormateada)
+this.reservationForm.controls['Total'].setValue((this.Total*this.descuento)*this.reservationForm.controls['Numero_Pasajeros'].value)
   //Todo:Realizar peticion a backend para registrar reservacion.
+  this.reservationForm.controls['ID_Usuario'].setValue(localStorage.getItem('Userid'))
   const formData = this.reservationForm.value;
+  console.log(this.reservationForm.controls['ID_Usuario'].value)
   this.Http.post<ReservationResponse>(`${API_URL}/reserves`,formData)
   .subscribe(
     (data) => {
@@ -159,7 +164,6 @@ ConfirmTypeReserve() {
 async Update(lista:string){
   const origenid=this.reservationForm.controls['Origen'].value
   const destinoid=this.reservationForm.controls['Destino'].value
-  console.log(this.HasDiscount)
   if (lista==='Origen') {
   this.estacionesDestinoFiltradas=this.Estaciones.filter(estacion=>{
     return estacion.id!=origenid

@@ -8,6 +8,7 @@ export interface Reservation {
   TrenId: TrenId
   Origen: Origen
   Destino: Destino
+  Total:number
 }
 
 export interface UserId {
