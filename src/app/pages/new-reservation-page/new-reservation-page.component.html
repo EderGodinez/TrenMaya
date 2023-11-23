@@ -34,8 +34,8 @@
 <div class="w-screen" style="height: 60vh;">
   <div class="flex flex-row-reverse gap-3 mr-8">
     <span class="flex flex-column" *ngIf="HasDiscount">
-      <h6>{{descuento}}%</h6>
-      <h4>{{(Total*((100-descuento)/100))*reservationForm.controls['Numero_Pasajeros'].value|currency}}</h4>
+      <h6>{{descuento*100}}%</h6>
+      <h4>{{(Total*(1-descuento))*reservationForm.controls['Numero_Pasajeros'].value|currency}}</h4>
     </span>
     <h2 class="flex">Total a pagar<h4 [ngStyle]="{ 'text-decoration': HasDiscount ? 'line-through' : 'none' }">{{Total*reservationForm.controls['Numero_Pasajeros'].value | currency}}</h4> </h2>
   </div>
