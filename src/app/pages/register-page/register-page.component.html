@@ -52,7 +52,8 @@
                     </div>
                     <div class="w-6">
                       <label for="doc" class="block text-900 text-xl font-medium my-3">Documento oficial</label>
-                      <p-fileUpload mode="basic" chooseLabel="Choose" name="demo[]" url="http://localhost:3000/files/upload" accept="image/*" (onUpload)="onUpload($event)"></p-fileUpload>
+                      <!-- <input type="file" name="" id="fileuploader" accept="image/*" (change)="onFileChange($event)" class="block"> -->
+                      <p-fileUpload mode="basic" chooseLabel="Imagen de identificacion" name="file" url="http://localhost:3000/files/upload" accept="image/*" (onUpload)="onUpload($event)" [auto]="true"></p-fileUpload>
                       <small class="font-medium">Ingresar documento oficial en formato de imagen </small>
 
                     </div>
@@ -64,7 +65,7 @@
                       <label for="birthdate" class="block text-900 text-xl font-medium my-3">Fecha de nacimiento</label>
                       <p-calendar formControlName="birtdate" [showIcon]="true"></p-calendar><br>
                       <small id="calendar-help">Ingrese la fecha de nacimiento de debera ser mayor de edad <br></small>
-                      <small *ngIf="!esMayorDeEdad(RegisterForm.controls['birtdate'].value)" class="text-danger" id="calendar-help">Usuario no es mayor de edad</small>
+                      <!-- <small *ngIf="!esMayorDeEdad(RegisterForm.controls['birtdate'].value)" class="text-danger" id="calendar-help">Usuario no es mayor de edad</small> -->
                     </div>
                     <div class="w-4">
                       <label for="gender" class="block text-900 text-xl font-medium my-3">Contraseña</label>

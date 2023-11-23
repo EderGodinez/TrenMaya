@@ -34,18 +34,13 @@ export class ViewReservationsComponent {
     this.AuthService.userEmail$.subscribe((email) => {
       const correo=this.userEmail;
       this.userEmail = email;
-      console.log(this.userEmail)
-      console.log(this.userid)
         this.Reservations=[]
         this.PendientReservations=[]
      this.showReserves(this.userEmail!,this.userid!);
-     console.log(this.Reservations)
-     console.log(this.PendientReservations)
     });
   }
   showReserves(useremail:string,userid:string){
     this.ReservationService.getReserves(useremail,userid).subscribe((reservation)=>{
-      console.log(reservation)
       reservation.forEach((reserve)=>{
         const reservacion:Reserve={
           FechaReserva:new Date(reserve.Fecha_Reserva),

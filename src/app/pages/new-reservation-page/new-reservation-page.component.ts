@@ -23,35 +23,40 @@ export class NewReservationPageComponent implements OnInit {
   constructor(private FormBuilder:FormBuilder,private ValidatorService:ValidatorService,private Http:HttpClient,
     private Message:MessageService,private confirmationService: ConfirmationService,private ReservationService:ReservationService){
       this.Today = new Date();
+      if (localStorage.getItem('Useremail')) {
+        this.reservationForm.controls['email'].setValue(localStorage.getItem('Useremail'))
+        this.reservationForm.get('email')?.disable();
+      }
       const token=localStorage.getItem('token')
-
       const Userstate:string|null=localStorage.getItem('UserState')
       const localStates:number[]=[1,2,3,4,5]
       if (token&&Userstate!==null){
         this.HasDiscount=true
         const userStateNumber = parseInt(Userstate, 10);
         if(localStates.includes(userStateNumber)){
-          this.descuento=75
+          this.descuento=.25//desceunto del 75
         }
         else
-        this.descuento=30
+        this.descuento=0.70//decuento del 30
       }
+      else
+      this.descuento=1
     }
   ngOnInit(): void {
     this.estacionesDestinoFiltradas=this.Estaciones
     this.estacionesOrigenFiltradas=this.Estaciones
   }
-  descuento:number=0;
+  descuento:number;
   Total:number=0
   HasDiscount:boolean=false;
   Subtotal:number=0
   reservationForm:FormGroup=this.FormBuilder.group({
-    email:["eder.godinez@gmail.com",[Validators.required,Validators.pattern(this.ValidatorService.emailPattern)]],
-    ID_Usuario:[1,Validators.required],
-    ID_Tren:[1,Validators.required],
+    email:["",[Validators.required,Validators.pattern(this.ValidatorService.emailPattern)]],
+    ID_Usuario:[localStorage.getItem('Userid'),Validators.required],
+    ID_Tren:[0,Validators.required],
     Origen:[,Validators.required],
     Destino:[,Validators.required],
-    Numero_Pasajeros:[12,[Validators.required,Validators.max(100)]],
+    Numero_Pasajeros:[,[Validators.required,Validators.max(100)]],
     fecha_salida:["",Validators.required],
     Total:[0]
   })
@@ -104,7 +109,7 @@ Horarios:Horario[]=[
 ]
 Today:Date;
 ReservarBoletos(){
-  if(!this.reservationForm.valid) 
+  if(!this.reservationForm.valid)
     return
   const fechaDesdeOriginal: string = this.reservationForm.controls['fecha_salida'].value;
 const fechaDesde: Date = new Date(fechaDesdeOriginal);
@@ -112,9 +117,7 @@ const FechaFormateada: string = `${fechaDesde.getFullYear()}-${(fechaDesde.getMo
 this.reservationForm.controls['fecha_salida'].setValue(FechaFormateada)
 this.reservationForm.controls['Total'].setValue((this.Total*this.descuento)*this.reservationForm.controls['Numero_Pasajeros'].value)
   //Todo:Realizar peticion a backend para registrar reservacion.
-  this.reservationForm.controls['ID_Usuario'].setValue(localStorage.getItem('Userid'))
   const formData = this.reservationForm.value;
-  console.log(this.reservationForm.controls['ID_Usuario'].value)
   this.Http.post<ReservationResponse>(`${API_URL}/reserves`,formData)
   .subscribe(
     (data) => {
@@ -131,6 +134,7 @@ pendientReservation(){
 const fechaDesde: Date = new Date(fechaDesdeOriginal);
 const FechaFormateada: string = `${fechaDesde.getFullYear()}-${(fechaDesde.getMonth() + 1).toString().padStart(2, '0')}-${fechaDesde.getDate().toString().padStart(2, '0')}`;
 this.reservationForm.controls['fecha_salida'].setValue(FechaFormateada)
+this.reservationForm.controls['Total'].setValue((this.Total*this.descuento)*this.reservationForm.controls['Numero_Pasajeros'].value)
   //Todo:Realizar peticion a backend para registrar reservacion pendiente.
   const formData = this.reservationForm.value;
   this.Http.post<ReservationResponse>(`${API_URL}/reserves/pendient`,formData)

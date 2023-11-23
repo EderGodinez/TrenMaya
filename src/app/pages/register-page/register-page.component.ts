@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import { FormBuilder,FormGroup,Validators} from '@angular/forms';
 import { ValidatorService } from '../../validators/validator.service';
 import { MessageService } from 'primeng/api';
-import { UploadEvent } from 'primeng/fileupload';
 import { RegisterService } from '../../services/register.service';
 import { UserInfo,User } from '../../interfaces/UserInfo.interface';
 interface states{
@@ -18,7 +17,8 @@ interface states{
   providers: [MessageService]
 })
 export class RegisterPageComponent {
-  constructor(private router:Router,private RegisterService: RegisterService,private FormBuilder:FormBuilder,private ValidatorService:ValidatorService,private messageService: MessageService){}
+  constructor(private router:Router,private RegisterService: RegisterService,private FormBuilder:FormBuilder,
+    private ValidatorService:ValidatorService,private messageService: MessageService){}
   public RegisterForm:FormGroup=this.FormBuilder.group({
     email:["",[Validators.required,Validators.pattern(this.ValidatorService.emailPattern)]],
     username:["",[Validators.required,Validators.pattern(this.ValidatorService.firstNameAndLastnamePattern)]],
@@ -102,9 +102,9 @@ export class RegisterPageComponent {
     }
     return edad >= 18;
 }
-onUpload(event: UploadEvent) {
-this.RegisterForm.controls['INE'].setValue(event.originalEvent)
-console.log(this.RegisterForm.value)
-  this.messageService.add({ severity: 'success', summary: 'Archivo subido', detail: 'Archivo guardado con exito' });
+onUpload(event: any) {
+  const fileid=event.originalEvent.body.response.split(' ')[3]
+  this.RegisterForm.controls['INE'].setValue(fileid)
+  this.messageService.add({ severity: 'success', summary: 'Archivo subido', detail: `Archivo guardado con exito con id ${fileid}`});
 }
 }
