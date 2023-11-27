@@ -6,7 +6,8 @@ export class User implements UserInfo{
   Estado:number
   fecha_nac:Date
   INE:string
-  constructor(username:string,pass:string,email:string,CURP:string,state:number,date:Date,INE:string){
+  Role:string
+  constructor(username:string,pass:string,email:string,CURP:string,state:number,date:Date,INE:string,Role:string){
   this.userName=username
   this.password=pass
   this.email=email
@@ -14,6 +15,7 @@ export class User implements UserInfo{
   this.Estado=state
   this.fecha_nac=date
   this.INE=INE
+  this.Role=Role
     }
 }
 export interface UserInfo{
@@ -24,4 +26,5 @@ export interface UserInfo{
     Estado:number
     fecha_nac:Date
     INE:string
+    Role:string
 }

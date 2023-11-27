@@ -18,7 +18,8 @@ interface states{
 })
 export class RegisterPageComponent {
   constructor(private router:Router,private RegisterService: RegisterService,private FormBuilder:FormBuilder,
-    private ValidatorService:ValidatorService,private messageService: MessageService){}
+    private ValidatorService:ValidatorService,private messageService: MessageService){
+    }
   public RegisterForm:FormGroup=this.FormBuilder.group({
     email:["",[Validators.required,Validators.pattern(this.ValidatorService.emailPattern)]],
     username:["",[Validators.required,Validators.pattern(this.ValidatorService.firstNameAndLastnamePattern)]],
@@ -28,7 +29,8 @@ export class RegisterPageComponent {
     CURP:[""],
     birtdate:[new Date("0"),[Validators.required]],
     password:["",[Validators.required,Validators.minLength(10),Validators.minLength(10)]],
-    Confirmpassword:[""]
+    Confirmpassword:[""],
+    Role:["user",[]]
   })
   States:states[] = [
   { id: 1, abr: 'CHP', nombre: 'Chiapas' },
@@ -66,13 +68,14 @@ export class RegisterPageComponent {
 ];
   async CreateAccount(){
     if (this.RegisterForm.valid) {
+      console.log(this.RegisterForm.value)
       const fechanac: string = this.RegisterForm.controls['birtdate'].value;
       const fecha: Date = new Date(fechanac);
       const FechaFormateada: string = `${fecha.getFullYear()}-${(fecha.getMonth() + 1).toString().padStart(2, '0')}-${fecha.getDate().toString().padStart(2, '0')}`;
       this.RegisterForm.controls['birtdate'].setValue(FechaFormateada)
       const formData = { ...this.RegisterForm.value };
-      const {email,username,lastname,state,INE,CURP,birtdate,password}=formData
-      const UserInfo:UserInfo=new User(`${username} ${lastname}`,password,email,CURP,state,birtdate,INE)
+      const {email,username,lastname,state,INE,CURP,birtdate,password,Role}=formData
+      const UserInfo:UserInfo=new User(`${username} ${lastname}`,password,email,CURP,state,birtdate,INE,Role)
       this.RegisterService.createAccount(UserInfo).subscribe(
         (response)=>{
           this.messageService.add({severity: 'success',life:5000,summary:'Cuenta creada con exito',detail:response.message})
