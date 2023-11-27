@@ -34,10 +34,10 @@ export class NewReservationPageComponent implements OnInit {
         this.HasDiscount=true
         const userStateNumber = parseInt(Userstate, 10);
         if(localStates.includes(userStateNumber)){
-          this.descuento=.25//desceunto del 75
+          this.descuento=.75//desceunto del 75
         }
         else
-        this.descuento=0.70//decuento del 30
+        this.descuento=0.3//decuento del 30
       }
       else
       this.descuento=1
@@ -115,7 +115,8 @@ ReservarBoletos(){
 const fechaDesde: Date = new Date(fechaDesdeOriginal);
 const FechaFormateada: string = `${fechaDesde.getFullYear()}-${(fechaDesde.getMonth() + 1).toString().padStart(2, '0')}-${fechaDesde.getDate().toString().padStart(2, '0')}`;
 this.reservationForm.controls['fecha_salida'].setValue(FechaFormateada)
-this.reservationForm.controls['Total'].setValue((this.Total*this.descuento)*this.reservationForm.controls['Numero_Pasajeros'].value)
+this.reservationForm.controls['Total'].setValue((this.Total*(1-this.descuento))*this.reservationForm.controls['Numero_Pasajeros'].value)
+this.reservationForm.get('email')?.enable();
   //Todo:Realizar peticion a backend para registrar reservacion.
   const formData = this.reservationForm.value;
   this.Http.post<ReservationResponse>(`${API_URL}/reserves`,formData)
@@ -123,6 +124,8 @@ this.reservationForm.controls['Total'].setValue((this.Total*this.descuento)*this
     (data) => {
       this.Message.add({severity:data.summary,detail:data.message,summary:'Exito'})
       this.reservationForm.reset()
+      this.reservationForm.controls['email'].setValue(localStorage.getItem('Useremail'))
+      this.reservationForm.get('email')?.disable();
     },
     (error) => {
       this.Message.add({severity:'error',detail:error.error.message ,summary:'Error al hacer reservacion'})
@@ -134,7 +137,8 @@ pendientReservation(){
 const fechaDesde: Date = new Date(fechaDesdeOriginal);
 const FechaFormateada: string = `${fechaDesde.getFullYear()}-${(fechaDesde.getMonth() + 1).toString().padStart(2, '0')}-${fechaDesde.getDate().toString().padStart(2, '0')}`;
 this.reservationForm.controls['fecha_salida'].setValue(FechaFormateada)
-this.reservationForm.controls['Total'].setValue((this.Total*this.descuento)*this.reservationForm.controls['Numero_Pasajeros'].value)
+this.reservationForm.controls['Total'].setValue((this.Total*(1-this.descuento))*this.reservationForm.controls['Numero_Pasajeros'].value)
+this.reservationForm.get('email')?.enable();
   //Todo:Realizar peticion a backend para registrar reservacion pendiente.
   const formData = this.reservationForm.value;
   this.Http.post<ReservationResponse>(`${API_URL}/reserves/pendient`,formData)
@@ -142,6 +146,8 @@ this.reservationForm.controls['Total'].setValue((this.Total*this.descuento)*this
     (data) => {
       this.Message.add({severity:data.summary,detail:data.message+' unicamente contaras 24h para confirmarla',summary:'Exito'})
       this.reservationForm.reset()
+      this.reservationForm.controls['email'].setValue(localStorage.getItem('Useremail'))
+      this.reservationForm.get('email')?.disable();
     },
     (error) => {
       this.Message.add({severity:'error',detail:error.error.message ,summary:'Error al hacer reservacion'})
