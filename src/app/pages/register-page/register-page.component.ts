@@ -68,7 +68,6 @@ export class RegisterPageComponent {
 ];
   async CreateAccount(){
     if (this.RegisterForm.valid) {
-      console.log(this.RegisterForm.value)
       const fechanac: string = this.RegisterForm.controls['birtdate'].value;
       const fecha: Date = new Date(fechanac);
       const FechaFormateada: string = `${fecha.getFullYear()}-${(fecha.getMonth() + 1).toString().padStart(2, '0')}-${fecha.getDate().toString().padStart(2, '0')}`;
