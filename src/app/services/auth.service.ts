@@ -18,7 +18,7 @@ login(loginInfo:login):Observable<loginResponse>{
   return this.http.post<loginResponse>(`${API_URL}/users/login`,loginInfo)
 }
 getUserInfoByToken(token:string):Observable<TokenResponse>{
-return this.http.get<TokenResponse>(`${API_URL}/users?userToken=${token}`)
+return this.http.get<TokenResponse>(`${API_URL}/users/info?userToken=${token}`)
 }
 validateToken(token:string): Observable<{message:string}> {
   const headers = new HttpHeaders({
