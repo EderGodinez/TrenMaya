@@ -1,10 +1,10 @@
-export interface TokenResponse {
-  rest: Rest
-  iat: number
-  exp: number
-}
+// export interface TokenResponse {
+//   rest: Rest
+//   iat: number
+//   exp: number
+// }
 
-export interface Rest {
+export interface TokenResponse {
   id: number
   email: string
   userName: string

@@ -40,10 +40,10 @@ export class LayoutPageComponent {
   }
   getUserInfo(Token:string){
     this.AuthService.getUserInfoByToken(Token).subscribe((info)=>{
-      this.Username=info.rest.userName.split(' ')[0]
-      localStorage.setItem('UserState',info.rest.Estado.toString())
-      localStorage.setItem('Useremail',info.rest.email)
-      localStorage.setItem('Userid',info.rest.id.toString())
+      this.Username=info.userName.split(' ')[0]
+      localStorage.setItem('UserState',info.Estado.toString())
+      localStorage.setItem('Useremail',info.email)
+      localStorage.setItem('Userid',info.id.toString())
      })
   }
   validateToken(Token:string){
